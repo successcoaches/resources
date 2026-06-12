@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Phone Training — Excel High School</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #3a6358; --gold: #a0784a; --gold-light: #b8905e;
+    --gold-bright: #ecbe83;
+    --cream: #f2ece0; --warm-gray: #e8e0d0; --text: #1a1a1a;
+    --muted: #6b6560; --border: rgba(74,124,111,0.2);
+    --green: #4a7c6f;
+    --on-green: rgba(242,236,224,0.88); --on-green-soft: rgba(242,236,224,0.35);
+    --success: #2A7A4B; --success-bg: #EAF4EE;
+    --danger: #A0311A; --danger-bg: #FAECE7;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--green); color: var(--text); min-height: 100vh; }
+
+  header {
+    background: var(--cream); padding: 48px 60px 40px;
+    position: relative; overflow: hidden;
+  }
+  header::before {
+    content: ''; position: absolute; top: -60px; right: -60px;
+    width: 320px; height: 320px; border-radius: 50%;
+    border: 60px solid rgba(74,124,111,0.12);
+  }
+  .header-eyebrow { font-size: 11px; font-weight: 500; letter-spacing: 3px; text-transform: uppercase; color: var(--gold); margin-bottom: 12px; }
+  header h1 { font-family: 'Playfair Display', serif; font-size: 42px; font-weight: 700; color: var(--navy); line-height: 1.1; margin-bottom: 14px; }
+  header p { font-size: 15px; color: var(--muted); max-width: 560px; line-height: 1.6; font-weight: 300; }
+  .back-link { display: inline-flex; align-items: center; gap: 6px; color: var(--gold); font-size: 13px; text-decoration: none; margin-bottom: 20px; font-weight: 500; transition: opacity 0.15s; }
+  .back-link:hover { opacity: 0.75; }
+
+  .gold-rule { height: 3px; background: linear-gradient(90deg, var(--gold-bright), transparent); }
+
+  .part-banner { display: flex; align-items: center; gap: 14px; margin: 0 0 36px; }
+  .part-banner .part-num { font-family: 'Playfair Display', serif; font-size: 15px; font-weight: 700; color: var(--navy); background: var(--gold-bright); width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .part-banner h2 { font-family: 'Playfair Display', serif; font-size: 26px; color: #fff; }
+  .part-banner .part-line { flex: 1; height: 1px; background: var(--on-green-soft); }
+  section.part-gap { margin-top: 72px; }
+  .blank { display: inline-block; min-width: 90px; border-bottom: 2px solid var(--gold); margin: 0 2px; }
+
+
+  main { max-width: 960px; margin: 0 auto; padding: 48px 40px 64px; }
+
+  section { margin-bottom: 52px; }
+  .section-label { font-size: 10px; font-weight: 500; letter-spacing: 3px; text-transform: uppercase; color: var(--gold-bright); margin-bottom: 6px; }
+  .section-title { font-family: 'Playfair Display', serif; font-size: 22px; color: var(--cream); margin-bottom: 20px; padding-bottom: 12px; border-bottom: 1px solid var(--on-green-soft); }
+
+  /* STEP LIST */
+  .step-list { display: flex; flex-direction: column; gap: 0; }
+  .step { display: grid; grid-template-columns: 48px 1fr; }
+  .step-spine { display: flex; flex-direction: column; align-items: center; }
+  .step-dot { width: 32px; height: 32px; border-radius: 50%; background: var(--cream); color: var(--navy); display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 500; flex-shrink: 0; z-index: 1; }
+  .step-line { flex: 1; width: 1px; background: var(--on-green-soft); margin: 4px 0; min-height: 16px; }
+  .step:last-child .step-line { display: none; }
+  .step-body { padding: 0 0 28px 16px; padding-top: 4px; }
+  .step-title { font-weight: 500; font-size: 15px; color: #fff; margin-bottom: 6px; }
+  .step-desc { font-size: 14px; color: var(--on-green); line-height: 1.7; }
+  .step-desc ul { margin: 8px 0 0 16px; display: flex; flex-direction: column; gap: 5px; }
+  .step-desc li { font-size: 13.5px; }
+
+  .tip-box { background: var(--cream); border-radius: 8px; padding: 20px 24px; color: var(--text); margin-top: 8px; }
+  .tip-box p { font-size: 13.5px; color: rgba(26,26,26,0.8); line-height: 1.6; font-weight: 300; }
+  .tip-box strong { color: var(--gold); }
+
+  /* SCENARIOS */
+  .scenario-card { background: #fff; border: 1px solid var(--border); border-radius: 8px; margin-bottom: 16px; overflow: hidden; }
+  .scenario-header { padding: 18px 24px; display: flex; align-items: center; gap: 14px; cursor: pointer; user-select: none; transition: background 0.15s; }
+  .scenario-header:hover { background: var(--warm-gray); }
+  .scenario-num { width: 28px; height: 28px; border-radius: 50%; background: var(--gold); color: #fff; font-size: 12px; font-weight: 500; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .scenario-title { font-weight: 500; font-size: 15px; color: var(--navy); flex: 1; }
+  .scenario-meta { font-size: 12px; color: var(--muted); margin-top: 2px; }
+  .chevron { font-size: 14px; color: var(--muted); transition: transform 0.2s; }
+  .scenario-card.open .chevron { transform: rotate(180deg); }
+  .scenario-body { display: none; border-top: 1px solid var(--border); }
+  .scenario-card.open .scenario-body { display: block; }
+
+  .phase { padding: 20px 24px; border-bottom: 1px solid var(--border); }
+  .phase:last-child { border-bottom: none; }
+  .phase-label { font-size: 10px; font-weight: 500; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); margin-bottom: 12px; }
+
+  /* QUIZ */
+  .quiz-q { font-size: 14px; color: var(--text); margin-bottom: 10px; line-height: 1.5; }
+  .quiz-options { display: flex; flex-direction: column; gap: 8px; margin-bottom: 10px; }
+  .quiz-opt {
+    padding: 10px 14px; font-size: 13.5px; font-family: 'DM Sans', sans-serif;
+    border: 1px solid var(--border); border-radius: 6px;
+    background: var(--cream); color: var(--text);
+    cursor: pointer; text-align: left; transition: all 0.15s;
+  }
+  .quiz-opt:hover:not(:disabled) { border-color: var(--gold); background: #fff; }
+  .quiz-opt.correct { background: var(--success-bg); border-color: var(--success); color: var(--success); font-weight: 500; }
+  .quiz-opt.wrong { background: var(--danger-bg); border-color: var(--danger); color: var(--danger); }
+  .quiz-opt:disabled { cursor: default; }
+  .quiz-feedback { font-size: 13px; color: var(--muted); line-height: 1.5; margin-top: 6px; min-height: 18px; }
+
+  /* ROLEPLAY SCRIPT */
+  .script-line { display: grid; grid-template-columns: 80px 1fr; gap: 10px; margin-bottom: 14px; align-items: start; }
+  .speaker { font-size: 11px; font-weight: 500; padding: 3px 8px; border-radius: 4px; text-align: center; white-space: nowrap; margin-top: 2px; }
+  .sp-you { background: var(--navy); color: #fff; }
+  .sp-caller { background: var(--gold); color: #fff; }
+  .line-text { font-size: 14px; color: var(--muted); line-height: 1.6; }
+  .line-text em { color: #aaa; font-style: italic; font-size: 13px; }
+
+  .coaching { background: var(--warm-gray); border-left: 3px solid var(--gold); border-radius: 0 6px 6px 0; padding: 12px 16px; margin-top: 12px; font-size: 13px; color: var(--muted); line-height: 1.6; }
+  .coaching strong { color: var(--navy); }
+
+  footer { background: var(--navy); text-align: center; padding: 20px; font-size: 12px; color: rgba(255,255,255,0.35); letter-spacing: 1px; }
+
+  @media (max-width: 600px) {
+    header { padding: 36px 24px 32px; }
+    header h1 { font-size: 28px; }
+    main { padding: 32px 20px 48px; }
+    .script-line { grid-template-columns: 64px 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <a href="index.html" class="back-link">← Back to Resources</a>
+  <p class="header-eyebrow">Excel High School · Training</p>
+  <h1>Phone Training</h1>
+  <p>Learn the welcome call process, then test your knowledge and practice with real scenarios before your first calls.</p>
+</header>
+<div class="gold-rule"></div>
+
+<main>
+
+  <div class="part-banner"><span class="part-num">1</span><h2>Welcome Calls</h2><span class="part-line"></span></div>
+
+  <!-- WELCOME CALL GUIDE -->
+  <section>
+    <p class="section-label">Step 1 — Learn</p>
+    <h2 class="section-title">Welcome Call Guide</h2>
+    <div class="step-list">
+
+      <div class="step">
+        <div class="step-spine"><div class="step-dot">1</div><div class="step-line"></div></div>
+        <div class="step-body">
+          <p class="step-title">Introduction</p>
+          <div class="step-desc">
+            Introduce yourself as the student's success coach and explain what that means.
+            <ul>
+              <li>You ensure the student gets enrolled in the proper classes</li>
+              <li>You support the family throughout enrollment as their main point of contact</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-spine"><div class="step-dot">2</div><div class="step-line"></div></div>
+        <div class="step-body">
+          <p class="step-title">Official Transcript <span style="font-size:12px;font-weight:400;color:rgba(242,236,224,0.7);">— students with credits to transfer only</span></p>
+          <div class="step-desc">
+            Explain that the family needs to request their former school send the student's official transcript to <strong>records@excelhighschool.com</strong> if they haven't already.
+            <ul>
+              <li>Provide information for submitting a records request if necessary</li>
+              <li>Mention current processing time (student records processing time + auditing time combined)</li>
+              <li>Let them know you'll reach out once credits are transferred — at that point the student can begin core classes</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-spine"><div class="step-dot">3</div><div class="step-line"></div></div>
+        <div class="step-body">
+          <p class="step-title">Student's Academic Journey</p>
+          <div class="step-desc">
+            Ask open-ended questions to understand the student's background and goals. Let them know this helps you best support the student throughout enrollment. Don't push for anything the family doesn't want to share.
+            <ul>
+              <li>Student's reasoning for joining Excel</li>
+              <li>Student's academic goals while at Excel</li>
+              <li>Student's goals and plans for after graduation</li>
+              <li>Does the student plan to graduate with EHS (or move on to EHS after completing EMS)?</li>
+            </ul>
+          </div>
+          <div class="tip-box" style="margin-top:12px;">
+            <p><strong>Tip:</strong> Ask open-ended questions and listen more than you talk. This information shapes everything else in the call.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-spine"><div class="step-dot">4</div><div class="step-line"></div></div>
+        <div class="step-body">
+          <p class="step-title">Credit Track <span style="font-size:12px;font-weight:400;color:rgba(242,236,224,0.7);">— high school students only</span></p>
+          <div class="step-desc">
+            Explain the 21.5- vs. 24-credit tracks and advise one based on the student's goals — though ultimately the student and family decide.
+            <ul>
+              <li>The 24-credit track requires a 4th math credit (at least Pre-Calculus) and two world language credits</li>
+              <li>Ask the student's preference: Spanish, French, or American Sign Language</li>
+              <li>Assign a language in their account if appropriate</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-spine"><div class="step-dot">5</div><div class="step-line"></div></div>
+        <div class="step-body">
+          <p class="step-title">Elective Selection</p>
+          <div class="step-desc">
+            Ask the student if they'd like to choose their <a href="https://www.excelhighschool.com/course-catalog/" target="_blank" style="color:var(--gold-bright);text-decoration:underline;">electives</a>.
+            <ul>
+              <li>Recommend specific electives based on the student's interests</li>
+              <li>Let Gold / Platinum / Future Ready students know they can take additional electives but are not required to</li>
+              <li>Make sure college-bound students are planning to take two world language electives before graduation</li>
+              <li>Ask Gold / Platinum / Future Ready students which core subjects they'd like as standard / honors / AP / dual enrollment</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-spine"><div class="step-dot">6</div><div class="step-line"></div></div>
+        <div class="step-body">
+          <p class="step-title">Conclusion</p>
+          <div class="step-desc">
+            Summarize all action items the family needs to complete and let them know when to expect to hear from you.
+            <ul>
+              <li>E.g. contact former school for official transcript, have student reply to your email with elective preferences</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- SPECIAL CASES -->
+  <section>
+    <p class="section-label">Watch For</p>
+    <h2 class="section-title">Special Cases</h2>
+    <div style="display:flex;flex-direction:column;gap:12px;">
+
+      <div style="background:#fff;border:1px solid var(--border);border-radius:8px;padding:18px 22px;">
+        <p style="font-weight:500;font-size:14px;color:var(--navy);margin-bottom:8px;">🌴 Student from California?</p>
+        <p style="font-size:13.5px;color:var(--muted);line-height:1.6;">Make sure they are enrolled in the correct California-specific program.</p>
+      </div>
+
+      <div style="background:#fff;border:1px solid var(--border);border-radius:8px;padding:18px 22px;">
+        <p style="font-weight:500;font-size:14px;color:var(--navy);margin-bottom:8px;">🗽 Student from New York?</p>
+        <p style="font-size:13.5px;color:var(--muted);line-height:1.6;">Send them the email template regarding complying with NY Department of Education requirements as a virtual student.</p>
+      </div>
+
+      <div style="background:#fff;border:1px solid var(--border);border-radius:8px;padding:18px 22px;">
+        <p style="font-weight:500;font-size:14px;color:var(--navy);margin-bottom:8px;">🎓 12th grader enrolled in a Semester program?</p>
+        <p style="font-size:13.5px;color:var(--muted);line-height:1.6;">Direct them to enroll in a full-year program, explaining the 25% / 6-credit rule.</p>
+      </div>
+
+      <div style="background:#fff;border:1px solid var(--border);border-radius:8px;padding:18px 22px;">
+        <p style="font-weight:500;font-size:14px;color:var(--navy);margin-bottom:8px;">📅 Student young for their grade level?</p>
+        <p style="font-size:13.5px;color:var(--muted);line-height:1.6;">Explain graduation requirements — the student must fulfill <strong>one</strong> of the following to graduate:</p>
+        <ul style="margin:8px 0 0 16px;display:flex;flex-direction:column;gap:5px;font-size:13.5px;color:var(--muted);">
+          <li>Be at least 17 years old</li>
+          <li>Have a college acceptance letter with a start date before their 17th birthday</li>
+          <li>Earn at least a 26 on the ACT or a 1270 on the SAT</li>
+        </ul>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- SCENARIOS -->
+  <section>
+    <p class="section-label">Step 2 — Quiz &amp; Step 3 — Role-play</p>
+    <h2 class="section-title">Common Scenarios at Excel</h2>
+    <p style="font-size:14px;color:var(--on-green);margin-bottom:24px;line-height:1.6;">For each scenario: read through the context, answer the quiz question, then role-play the call with your trainer (sit back-to-back — no visual cues!).</p>
+
+    <!-- SCENARIO 1 -->
+    <div class="scenario-card" id="sc1">
+      <div class="scenario-header" onclick="toggle('sc1')">
+        <div class="scenario-num">1</div>
+        <div>
+          <div class="scenario-title">12th grade student just enrolled in a Semester program — now what?</div>
+          <div class="scenario-meta">New enrollment · Semester program</div>
+        </div>
+        <span class="chevron">▾</span>
+      </div>
+      <div class="scenario-body">
+
+        <div class="phase">
+          <p class="phase-label">Context</p>
+          <p style="font-size:14px;color:var(--muted);line-height:1.7;">A 12th grade student just enrolled in the Semester program. They have a transcript from their previous school. This is your first contact with the family after enrollment is confirmed.</p>
+        </div>
+
+        <div class="phase">
+          <p class="phase-label">Quiz — What do you do first?</p>
+          <p class="quiz-q">The student just enrolled. What is your first action on the welcome call?</p>
+          <div class="quiz-options" id="q-sc1">
+            <button class="quiz-opt" onclick="answerQuiz('sc1',this,false,'Not quite — before anything else, introduce yourself and explain your role as their success coach.')">Assign electives right away so they can start learning</button>
+            <button class="quiz-opt" onclick="answerQuiz('sc1',this,false,'Close but not first — the transcript request comes after you introduce yourself and explain your role.')">Ask them to send the official transcript to records@excelhighschool.com</button>
+            <button class="quiz-opt" onclick="answerQuiz('sc1',this,true,'Correct! Always introduce yourself first and explain what a success coach does before getting into logistics.')">Introduce yourself as their success coach and explain your role</button>
+            <button class="quiz-opt" onclick="answerQuiz('sc1',this,false,'Not yet — credit tracks come after you\'ve introduced yourself and requested the transcript.')">Explain the 21.5 vs. 24-credit track options</button>
+          </div>
+          <p class="quiz-feedback" id="fb-sc1"></p>
+        </div>
+
+        <div class="phase">
+          <p class="phase-label">Role-play</p>
+          <div class="script-line"><span class="speaker sp-you">You</span><div class="line-text">Answer the phone with your greeting. <em>(Practice your opener — name, school, how can I help?)</em></div></div>
+          <div class="script-line"><span class="speaker sp-caller">Caller</span><div class="line-text">"Hi, yes — my daughter just enrolled in the semester program. Someone told me her success coach would be reaching out?"</div></div>
+          <div class="script-line"><span class="speaker sp-you">You</span><div class="line-text">Confirm who you are and explain what a success coach does. <em>(Keep it warm and reassuring.)</em></div></div>
+          <div class="script-line"><span class="speaker sp-caller">Caller</span><div class="line-text">"Okay great. So what happens next? She wants to start as soon as possible."</div></div>
+          <div class="script-line"><span class="speaker sp-you">You</span><div class="line-text">Explain the transcript process, where to send it, processing time, and that she'll begin core classes once credits are transferred.</div></div>
+          <div class="script-line"><span class="speaker sp-caller">Caller</span><div class="line-text">"She's really into art and music — is there anything like that?"</div></div>
+          <div class="script-line"><span class="speaker sp-you">You</span><div class="line-text">Ask open-ended questions about her interests and goals, then suggest relevant electives.</div></div>
+          <div class="coaching"><strong>Debrief:</strong> Did you introduce yourself before jumping to logistics? Did you explain processing time clearly without creating frustration? How did the elective recommendation feel?</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SCENARIO 2 -->
+    <div class="scenario-card" id="sc2">
+      <div class="scenario-header" onclick="toggle('sc2')">
+        <div class="scenario-num">2</div>
+        <div>
+          <div class="scenario-title">Student from NY just enrolled in the Gold Program</div>
+          <div class="scenario-meta">New enrollment · Gold Program · New York state</div>
+        </div>
+        <span class="chevron">▾</span>
+      </div>
+      <div class="scenario-body">
+
+        <div class="phase">
+          <p class="phase-label">Context</p>
+          <p style="font-size:14px;color:var(--muted);line-height:1.7;">A student from New York just enrolled in the Gold Program. NY has specific graduation requirements that may differ from Excel's standard tracks. Be prepared to navigate state-specific requirements alongside Excel's credit tracks.</p>
+        </div>
+
+        <div class="phase">
+          <p class="phase-label">Quiz — Credit track recommendation</p>
+          <p class="quiz-q">The family asks which credit track you recommend. The student plans to attend a 4-year college. What do you advise?</p>
+          <div class="quiz-options" id="q-sc2">
+            <button class="quiz-opt" onclick="answerQuiz('sc2',this,false,'Not quite — for a college-bound student, the 24-credit track is generally the stronger recommendation.')">Recommend the 21.5-credit track since it\'s simpler</button>
+            <button class="quiz-opt" onclick="answerQuiz('sc2',this,true,'Correct! For a college-bound student, the 24-credit track is the stronger fit. Be sure to mention the 4th math credit and two world language credits it requires, and ask about language preference.')">Recommend the 24-credit track and explain the additional math and language requirements</button>
+            <button class="quiz-opt" onclick="answerQuiz('sc2',this,false,'The family should be advised — but you should still offer a recommendation based on the student\'s goals.')">Tell the family it\'s entirely their decision and offer no guidance</button>
+          </div>
+          <p class="quiz-feedback" id="fb-sc2"></p>
+        </div>
+
+        <div class="phase">
+          <p class="phase-label">Role-play</p>
+          <div class="script-line"><span class="speaker sp-caller">Caller</span><div class="line-text">"We're in New York. Does that change anything about how he'll graduate?"</div></div>
+          <div class="script-line"><span class="speaker sp-you">You</span><div class="line-text">Address the NY-specific context. <em>(Know your state requirements or know how to find them quickly.)</em></div></div>
+          <div class="script-line"><span class="speaker sp-caller">Caller</span><div class="line-text">"He wants to study engineering in college."</div></div>
+          <div class="script-line"><span class="speaker sp-you">You</span><div class="line-text">Use this to guide your credit track recommendation. Explain both options and why the 24-credit track fits his goals.</div></div>
+          <div class="script-line"><span class="speaker sp-caller">Caller</span><div class="line-text">"He's not really a language person. Does he have to take one?"</div></div>
+          <div class="script-line"><span class="speaker sp-you">You</span><div class="line-text">Explain the world language requirement for the 24-credit track honestly. Offer the three options (Spanish, French, ASL) and note that ultimately it's their choice.</div></div>
+          <div class="coaching"><strong>Debrief:</strong> Did you acknowledge the NY state context? Did you make a clear recommendation while respecting the family's decision? How did you handle the pushback on world language?</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SCENARIO 3 -->
+    <div class="scenario-card" id="sc3">
+      <div class="scenario-header" onclick="toggle('sc3')">
+        <div class="scenario-num">3</div>
+        <div>
+          <div class="scenario-title">Student from CA just enrolled in the Silver Program</div>
+          <div class="scenario-meta">New enrollment · Silver Program · California state</div>
+        </div>
+        <span class="chevron">▾</span>
+      </div>
+      <div class="scenario-body">
+
+        <div class="phase">
+          <p class="phase-label">Context</p>
+          <p style="font-size:14px;color:var(--muted);line-height:1.7;">A student from California just enrolled in the Silver Program. California has its own graduation requirements. This student is mid-enrollment and the family is eager to get started quickly.</p>
+        </div>
+
+        <div class="phase">
+          <p class="phase-label">Quiz — Transcript request</p>
+          <p class="quiz-q">The parent says their student's previous school is being slow about sending the transcript. What do you tell them?</p>
+          <div class="quiz-options" id="q-sc3">
+            <button class="quiz-opt" onclick="answerQuiz('sc3',this,false,'Not quite — skipping the transcript review could result in incorrect course assignments.')">Tell them it\'s fine and assign courses without the transcript</button>
+            <button class="quiz-opt" onclick="answerQuiz('sc3',this,true,'Correct! Provide guidance on submitting a records request, explain the processing timeline, and reassure them that you\'ll follow up once credits are transferred.')">Provide records request guidance, explain processing time, and reassure them you\'ll follow up</button>
+            <button class="quiz-opt" onclick="answerQuiz('sc3',this,false,'This isn\'t the right approach — the family needs your guidance and a clear next step.')">Tell them there\'s nothing you can do until the transcript arrives</button>
+          </div>
+          <p class="quiz-feedback" id="fb-sc3"></p>
+        </div>
+
+        <div class="phase">
+          <p class="phase-label">Role-play</p>
+          <div class="script-line"><span class="speaker sp-caller">Caller</span><div class="line-text">"We're calling from California. My son just enrolled in the Silver Program. He's really eager to start — he's been out of school for a semester."</div></div>
+          <div class="script-line"><span class="speaker sp-you">You</span><div class="line-text">Introduce yourself, explain your role, and acknowledge their excitement. Set realistic expectations about the transcript process.</div></div>
+          <div class="script-line"><span class="speaker sp-caller">Caller</span><div class="line-text">"His old school is taking forever. Can he just start now and sort out the credits later?"</div></div>
+          <div class="script-line"><span class="speaker sp-you">You</span><div class="line-text">Explain why the transcript review matters and what the student can do in the meantime. Keep the tone empathetic — you understand their frustration.</div></div>
+          <div class="script-line"><span class="speaker sp-caller">Caller</span><div class="line-text">"He's thinking about going into nursing after graduation. Does that affect what he takes?"</div></div>
+          <div class="script-line"><span class="speaker sp-you">You</span><div class="line-text">Use this to guide science elective recommendations and the credit track conversation.</div></div>
+          <div class="coaching"><strong>Debrief:</strong> Did you stay empathetic without making promises you can't keep? Did you use the nursing goal to shape your recommendations? How did you handle the "start now" pressure?</div>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <div class="part-banner" style="margin-top:72px;"><span class="part-num">2</span><h2>Inquiry &amp; General Calls</h2><span class="part-line"></span></div>
+
+  <!-- LIVE CALL EXAMPLE -->
+  <section>
+    <p class="section-label">Step 1 — Listen</p>
+    <h2 class="section-title">Learn from a Real Call</h2>
+    <p style="font-size:14px;color:var(--on-green);margin-bottom:24px;line-height:1.6;">Listen to Abby's live single course inquiry call on RingSense, then review the highlights below. Notice how she confirms the state, recommends the right course version, and is upfront about cost.</p>
+
+    <div class="scenario-card" id="live1">
+      <div class="scenario-header" onclick="toggle('live1')">
+        <div class="scenario-num">▶</div>
+        <div>
+          <div class="scenario-title">Single Course Inquiry — French 2 over the summer</div>
+          <div class="scenario-meta">Live call · Abby Berndt · Parent of a CA 10th grader</div>
+        </div>
+        <span class="chevron">▾</span>
+      </div>
+      <div class="scenario-body">
+
+        <div class="phase">
+          <p class="phase-label">Call highlights</p>
+          <div class="script-line"><span class="speaker sp-caller">Parent</span><div class="line-text">"I'm interested in having my son, who's in 10th grade, take a French 2 class over the summer. I wasn't sure about the registration deadline."</div></div>
+          <div class="script-line"><span class="speaker sp-you">Abby</span><div class="line-text">Reassures that single courses are open enrollment and self-paced with no deadline, then asks: <em>"What state are you located in?"</em></div></div>
+          <div class="script-line"><span class="speaker sp-caller">Parent</span><div class="line-text">"California."</div></div>
+          <div class="script-line"><span class="speaker sp-you">Abby</span><div class="line-text">Recommends the <strong>French 2 CA A-G</strong> version: UC schools have strict requirements, and it transfers more easily to a California school. Confirms the family wants the full year credit, so not the A or B half versions.</div></div>
+          <div class="script-line"><span class="speaker sp-you">Abby</span><div class="line-text">Flags the price difference upfront: <em>"The cost for that one is $370 instead of the $325... I just want to make sure that fee does not surprise you."</em></div></div>
+          <div class="script-line"><span class="speaker sp-caller">Parent</span><div class="line-text">"Is it something he might be able to complete over the summer?"</div></div>
+          <div class="script-line"><span class="speaker sp-you">Abby</span><div class="line-text">Very doable: about <strong>10 hours a week</strong> over the summer. Outlines the course structure (projects, unit quizzes, midterm and final), grading turnaround (3 to 5 business days), and how the transcript is sent to the school or a future college.</div></div>
+          <div class="script-line"><span class="speaker sp-you">Abby</span><div class="line-text">Warm close: <em>"Is there anything else I can help you with? ... Thanks for being part of our community."</em></div></div>
+          <div class="coaching"><strong>What to notice:</strong> Abby asks for the state before recommending a course, steers the family to the correct CA A-G version, names the exact course so there is no confusion, surfaces the higher price before the family finds it on their own, and gives a realistic weekly time estimate instead of a vague promise.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRACTICE SCRIPTS -->
+  <section>
+    <p class="section-label">Step 2 — Practice</p>
+    <h2 class="section-title">Role-play Scripts</h2>
+    <p style="font-size:14px;color:var(--on-green);margin-bottom:24px;line-height:1.6;">Practice each call with your trainer. Review the objectives first, then run the script. The trainer plays the caller.</p>
+
+    <!-- PRACTICE 1 -->
+    <div class="scenario-card" id="pr1">
+      <div class="scenario-header" onclick="toggle('pr1')">
+        <div class="scenario-num">1</div>
+        <div>
+          <div class="scenario-title">Friendly parent asking about enrollment</div>
+          <div class="scenario-meta">Inquiry · 10th grade enrollment, program structure, grading</div>
+        </div>
+        <span class="chevron">▾</span>
+      </div>
+      <div class="scenario-body">
+
+        <div class="phase">
+          <p class="phase-label">Key objectives</p>
+          <ul style="margin:0 0 0 16px;display:flex;flex-direction:column;gap:5px;font-size:13.5px;color:var(--muted);">
+            <li>Warm and professional greeting</li>
+            <li>Clearly explain the enrollment process</li>
+            <li>Set expectations about the self-paced model</li>
+            <li>Describe what is included in tuition</li>
+            <li>Reassure and encourage next steps</li>
+          </ul>
+        </div>
+
+        <div class="phase">
+          <p class="phase-label">Script</p>
+          <div class="script-line"><span class="speaker sp-caller">Caller</span><div class="line-text">"Hi, I'm looking into online school for my daughter. She'll be going into 10th grade. How do I sign her up?"</div></div>
+          <div class="script-line"><span class="speaker sp-you">You</span><div class="line-text">"Hi there! I'd be happy to help. For a 10th grader, you'd want to enroll her in our Standard High School Program unless she's interested in the Honors track. You can enroll online by clicking Enroll Now on our website, but I can walk you through it if that's easier."</div></div>
+          <div class="script-line"><span class="speaker sp-caller">Caller</span><div class="line-text">"Okay. And is this a full-time program with real teachers?"</div></div>
+          <div class="script-line"><span class="speaker sp-you">You</span><div class="line-text">"Great question! It is a full high school program, but it's self-paced and asynchronous, so students work independently through the curriculum. We have certified teachers who grade and provide feedback, but there aren't live classes. Your daughter will have access to support through messaging and can request help when needed."</div></div>
+          <div class="script-line"><span class="speaker sp-caller">Caller</span><div class="line-text">"What's included in the tuition?"</div></div>
+          <div class="script-line"><span class="speaker sp-you">You</span><div class="line-text">"The monthly tuition covers access to the core courses (English, Math, Science, Social Studies) and one elective at a time. Grading, transcripts, and student support are all included. There are optional fees for things like AP courses, Success Coach Pro, or course extensions if needed."</div></div>
+          <div class="script-line"><span class="speaker sp-caller">Caller</span><div class="line-text">"Okay. And what about grades?"</div></div>
+          <div class="script-line"><span class="speaker sp-you">You</span><div class="line-text">"Her work is automatically graded where possible, like quizzes and multiple choice. For writing assignments and projects, our teachers grade and return them with feedback. Progress reports are available anytime in the parent portal, and final grades go on her transcript."</div></div>
+          <div class="script-line"><span class="speaker sp-caller">Caller</span><div class="line-text">"That sounds good. I'll talk to my daughter and probably sign up this week."</div></div>
+          <div class="script-line"><span class="speaker sp-you">You</span><div class="line-text">"Perfect! And if you have any questions while enrolling, feel free to call us back or email. We're happy to help!"</div></div>
+          <div class="coaching"><strong>Skills tested:</strong> Explaining enrollment, tone, pacing, explaining the asynchronous model, tuition coverage, and the support structure.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PRACTICE 2 -->
+    <div class="scenario-card" id="pr2">
+      <div class="scenario-header" onclick="toggle('pr2')">
+        <div class="scenario-num">2</div>
+        <div>
+          <div class="scenario-title">Concerned parent about lack of progress</div>
+          <div class="scenario-meta">Support · Frustrated caller, role clarity, progress emails</div>
+        </div>
+        <span class="chevron">▾</span>
+      </div>
+      <div class="scenario-body">
+
+        <div class="phase">
+          <p class="phase-label">Key objectives</p>
+          <ul style="margin:0 0 0 16px;display:flex;flex-direction:column;gap:5px;font-size:13.5px;color:var(--muted);">
+            <li>Acknowledge the concern empathetically</li>
+            <li>Check student progress in the SIS</li>
+            <li>Clarify the role and limits of the Success Coach</li>
+            <li>Offer follow-up support and options</li>
+          </ul>
+        </div>
+
+        <div class="phase">
+          <p class="phase-label">Script</p>
+          <div class="script-line"><span class="speaker sp-caller">Caller</span><div class="line-text">"I'm really concerned. My son isn't making progress, and we haven't heard from his Success Coach in weeks. What's going on?"</div></div>
+          <div class="script-line"><span class="speaker sp-you">You</span><div class="line-text">"I'm so sorry to hear that, and thank you for reaching out. Can I get your son's name so I can look into his account and see what's been happening?"</div></div>
+          <div class="script-line"><span class="speaker sp-caller">Caller</span><div class="line-text">"His name is Caleb Johnson."</div></div>
+          <div class="script-line"><span class="speaker sp-you">You</span><div class="line-text">"Thanks, one moment while I pull up his file... Okay, I see that Caleb is in the 11th grade program and hasn't submitted any work in about three weeks."</div></div>
+          <div class="script-line"><span class="speaker sp-caller">Caller</span><div class="line-text">"That's what I'm worried about. He says he wants to finish, but he's completely unmotivated. I thought we'd be getting more support."</div></div>
+          <div class="script-line"><span class="speaker sp-you">You</span><div class="line-text">"I completely understand. It's hard to see your child struggle, especially with online learning. Our Success Coaches provide support for enrollment in courses and planning. You can also more closely monitor Caleb's progress and grades through the weekly progress emails, which are sent to the parent email on file."</div></div>
+          <div class="script-line"><span class="speaker sp-caller">Caller</span><div class="line-text">"I have not been receiving those emails."</div></div>
+          <div class="script-line"><span class="speaker sp-you">You</span><div class="line-text">"Let me check the parent email on file to confirm it's correct. You can also update this through the family login. Would you like me to email you instructions for accessing the family login?"</div></div>
+          <div class="script-line"><span class="speaker sp-caller">Caller</span><div class="line-text">"Yes, please. Thank you."</div></div>
+          <div class="script-line"><span class="speaker sp-you">You</span><div class="line-text">"Of course, we're here to help!"</div></div>
+          <div class="coaching"><strong>Skills tested:</strong> Handling frustration calmly, clarifying program limits, offering a path forward, and following up with support.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PRACTICE 3 -->
+    <div class="scenario-card" id="pr3">
+      <div class="scenario-header" onclick="toggle('pr3')">
+        <div class="scenario-num">3</div>
+        <div>
+          <div class="scenario-title">Course inquiry: Geometry (fill in the blanks)</div>
+          <div class="scenario-meta">Inquiry · Single course details, no notes allowed</div>
+        </div>
+        <span class="chevron">▾</span>
+      </div>
+      <div class="scenario-body">
+
+        <div class="phase">
+          <p class="phase-label">How this one works</p>
+          <p style="font-size:14px;color:var(--muted);line-height:1.7;">The caller asks for details about a single Geometry course. Fill in each blank out loud from memory. If you get stuck, look it up the way you would on a real call, then note it for next time.</p>
+        </div>
+
+        <div class="phase">
+          <p class="phase-label">Script</p>
+          <div class="script-line"><span class="speaker sp-you">You</span><div class="line-text">"Thank you for calling Excel High School! This is [your name]. How can I help you today?"</div></div>
+          <div class="script-line"><span class="speaker sp-caller">Caller</span><div class="line-text">"Hi, I'm interested in taking a Geometry course. I have a few questions."</div></div>
+          <div class="script-line"><span class="speaker sp-you">You</span><div class="line-text">"Absolutely, I'd be happy to help. Let's go through your questions one by one."</div></div>
+          <div class="script-line"><span class="speaker sp-caller">Caller</span><div class="line-text">"How much does a single Geometry course cost?"</div></div>
+          <div class="script-line"><span class="speaker sp-you">You</span><div class="line-text">"The tuition for one Geometry course is <span class="blank"></span>."</div></div>
+          <div class="script-line"><span class="speaker sp-caller">Caller</span><div class="line-text">"How long do I have to complete the course?"</div></div>
+          <div class="script-line"><span class="speaker sp-you">You</span><div class="line-text">"Students have up to <span class="blank"></span> months from the date of enrollment to complete the course."</div></div>
+          <div class="script-line"><span class="speaker sp-caller">Caller</span><div class="line-text">"Why do you offer this as a summer course if it takes 6 months to complete?"</div></div>
+          <div class="script-line"><span class="speaker sp-you">You</span><div class="line-text">"We offer this as a summer course because all of our courses are <span class="blank"></span>. This means a student can complete a course much faster if they spend more time on it each day."</div></div>
+          <div class="script-line"><span class="speaker sp-caller">Caller</span><div class="line-text">"How long does it usually take students to finish?"</div></div>
+          <div class="script-line"><span class="speaker sp-you">You</span><div class="line-text">"The fastest a student could complete Geometry is <span class="blank"></span> days. It depends on the student's pace and schedule, but most students can complete a single course in under <span class="blank"></span> if they spend <span class="blank" style="min-width:50px;"></span> hours each day, Monday through Friday."</div></div>
+          <div class="script-line"><span class="speaker sp-caller">Caller</span><div class="line-text">"Where can I find the syllabus for the course?"</div></div>
+          <div class="script-line"><span class="speaker sp-you">You</span><div class="line-text">"Great question! You can find the course syllabus by visiting <span class="blank"></span>, or I can email it to you if you'd prefer."</div></div>
+          <div class="coaching"><strong>Skills tested:</strong> Recall of course pricing, completion windows, pacing math, and where to find syllabi without putting the caller on hold.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TIPS -->
+  <section>
+    <p class="section-label">Every Call</p>
+    <h2 class="section-title">Tips for All Calls</h2>
+    <div class="tip-box" style="margin-top:0;">
+      <ul style="margin:0 0 0 16px;display:flex;flex-direction:column;gap:7px;font-size:13.5px;color:rgba(26,26,26,0.8);">
+        <li>Always speak with <strong>empathy and patience</strong></li>
+        <li>Don't promise what you can't deliver</li>
+        <li>Use parent and student <strong>names</strong> to personalize the call</li>
+        <li>Take notes on the conversation in the <strong>CRM or ticket system</strong></li>
+        <li>Offer to send a <strong>follow-up email</strong> when needed</li>
+      </ul>
+    </div>
+  </section>
+
+</main>
+
+<footer>Excel High School · Phone Training</footer>
+
+<script>
+function toggle(id) {
+  document.getElementById(id).classList.toggle('open');
+}
+
+function answerQuiz(scenarioId, btn, correct, msg) {
+  const container = document.getElementById('q-' + scenarioId);
+  const buttons = container.querySelectorAll('.quiz-opt');
+  buttons.forEach(b => { b.disabled = true; });
+  btn.classList.add(correct ? 'correct' : 'wrong');
+  document.getElementById('fb-' + scenarioId).textContent = msg;
+}
+</script>
+</body>
+</html>

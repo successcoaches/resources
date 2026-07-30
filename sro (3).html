@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SRO — Excel Education Systems</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #4a7c6f;
+    --gold: #a0784a;
+    --gold-bright: #ecbe83;
+    --cream: #f2ece0;
+    --warm-gray: #e8e0d0;
+    --text: #1a1a1a;
+    --muted: #6b6560;
+    --border: rgba(74,124,111,0.2);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--cream);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  /* HEADER */
+  header {
+    background: var(--navy);
+    padding: 48px 60px 40px;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .header-content { position: relative; z-index: 1; }
+  .back-link {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 1px;
+    color: rgba(255,255,255,0.7);
+    text-decoration: none;
+    margin-bottom: 14px;
+  }
+  .back-link:hover { color: #fff; }
+  .header-eyebrow {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gold-bright);
+    margin-bottom: 10px;
+  }
+  header h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 40px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 10px;
+  }
+  header p.subtitle {
+    font-size: 15px;
+    font-weight: 300;
+    color: rgba(255,255,255,0.75);
+    max-width: 560px;
+    line-height: 1.5;
+  }
+  .header-logos { flex-shrink: 0; margin-left: 40px; position: relative; z-index: 1; }
+  .header-logos img { height: 60px; width: auto; display: block; }
+
+  /* MAIN LAYOUT */
+  main {
+    max-width: 1500px;
+    margin: 0 auto;
+    padding: 48px 60px 64px;
+  }
+
+  .top-links {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 36px;
+  }
+
+  .sheet-frame-wrap {
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(15,35,64,0.06);
+  }
+  .sheet-frame-wrap iframe {
+    display: block;
+    width: 100%;
+    height: 85vh;
+    border: none;
+  }
+
+  .section-label {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 6px;
+  }
+  .section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 26px;
+    color: var(--navy);
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+    font-weight: 700;
+  }
+
+  .link-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 40px;
+  }
+  .link-item {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 18px 22px;
+    text-decoration: none;
+    color: var(--text);
+    transition: box-shadow 0.2s, border-color 0.2s;
+  }
+  .link-item:hover {
+    border-color: var(--gold);
+    box-shadow: 0 4px 16px rgba(15,35,64,0.08);
+  }
+  .link-item-icon {
+    font-size: 18px;
+    flex-shrink: 0;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(74,124,111,0.1);
+    border-radius: 6px;
+    color: var(--navy);
+  }
+  .link-item-icon svg { width: 16px; height: 16px; stroke: var(--navy); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  .link-item-text { flex: 1; }
+  .link-item-title {
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--navy);
+  }
+  .link-item-sub {
+    font-size: 13px;
+    color: var(--muted);
+    font-weight: 300;
+  }
+  .link-arrow {
+    color: var(--gold);
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+
+  .empty-note {
+    color: var(--muted);
+    font-size: 14px;
+    font-style: italic;
+    padding: 4px 0 0;
+  }
+
+  footer {
+    background: var(--navy);
+    text-align: center;
+    padding: 20px;
+    font-size: 12px;
+    color: rgba(255,255,255,0.35);
+    letter-spacing: 1px;
+    user-select: none;
+  }
+
+  @media (max-width: 600px) {
+    header { padding: 36px 24px 32px; flex-direction: column; align-items: flex-start; gap: 20px; }
+    header h1 { font-size: 28px; }
+    .header-logos { margin-left: 0; }
+    main { padding: 32px 20px 48px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-content">
+    <a href="index.html" class="back-link">← Back to SC Team Hub</a>
+    <p class="header-eyebrow">Excel Education Systems · Staff Only</p>
+    <h1>SRO</h1>
+    <p class="subtitle">Documents and links maintained by the SRO team.</p>
+  </div>
+  <div class="header-logos">
+    <img src="Asset_2.svg" alt="Excel High School" style="height:60px;width:auto;">
+  </div>
+</header>
+
+<main>
+
+  <div class="top-links">
+    <a class="link-item" href="https://docs.google.com/document/d/1M8CxX7d04XPksIelBLd9vE_IIrd7nW12pBqJlv_i4YI/edit?tab=t.0" target="_blank">
+      <span class="link-item-icon"><svg viewBox="0 0 24 24"><path d="M16 3h5v5M21 3l-7 7M8 21H3v-5M3 21l7-7"/></svg></span>
+      <div class="link-item-text">
+        <div class="link-item-title">Credit Transfer Policy</div>
+        <div class="link-item-sub">Transcripts, international, homeschool, GED — Google Doc</div>
+      </div>
+      <span class="link-arrow">↗</span>
+    </a>
+    <a class="link-item" href="https://www.excelhighschool.com/admissions/homeschool-transfer/" target="_blank">
+      <span class="link-item-icon"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg></span>
+      <div class="link-item-text">
+        <div class="link-item-title">Homeschool Information</div>
+        <div class="link-item-sub">Homeschool transfer page &amp; form — excelhighschool.com<br>Homeschool Email (EHS): hmstransfer@excelhighschool.com<br>Homeschool Email (Northgate): hmstransfer@northgateacademy.com</div>
+      </div>
+      <span class="link-arrow">↗</span>
+    </a>
+  </div>
+
+  <p class="section-label">SRO</p>
+  <h2 class="section-title">Live Spreadsheet <span style="font-family:'Inter',sans-serif;font-size:13px;font-weight:400;color:var(--muted);border:none;">— updated weekly, always current</span></h2>
+
+  <div class="sheet-frame-wrap">
+    <iframe src="https://docs.google.com/spreadsheets/d/1MjF5SEFFl0l-KGAScngqF5e_bM16r6FyWXilp4fWjdg/preview" allowfullscreen></iframe>
+  </div>
+
+</main>
+
+<footer>
+  Excel High School · Northgate Academy · Success Coach Resources Hub
+</footer>
+
+</body>
+</html>

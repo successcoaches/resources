@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Enrollment Policies — Excel Education Systems</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #4a7c6f;
+    --gold: #a0784a;
+    --gold-bright: #ecbe83;
+    --cream: #f2ece0;
+    --warm-gray: #e8e0d0;
+    --text: #1a1a1a;
+    --muted: #6b6560;
+    --border: rgba(74,124,111,0.2);
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Inter', sans-serif; background: var(--cream); color: var(--text); min-height: 100vh; }
+
+  header { background: var(--navy); padding: 48px 60px 40px; display: flex; justify-content: space-between; align-items: center; }
+  .header-content { position: relative; z-index: 1; }
+  .back-link { display: inline-block; font-size: 12px; font-weight: 500; letter-spacing: 1px; color: rgba(255,255,255,0.7); text-decoration: none; margin-bottom: 14px; }
+  .back-link:hover { color: #fff; }
+  .header-eyebrow { font-size: 11px; font-weight: 500; letter-spacing: 3px; text-transform: uppercase; color: var(--gold-bright); margin-bottom: 10px; }
+  header h1 { font-family: 'Cormorant Garamond', serif; font-size: 40px; font-weight: 700; color: #fff; margin-bottom: 10px; }
+  header p.subtitle { font-size: 15px; font-weight: 300; color: rgba(255,255,255,0.75); max-width: 560px; line-height: 1.5; }
+  .header-logos { flex-shrink: 0; margin-left: 40px; }
+  .header-logos img { height: 60px; width: auto; display: block; }
+
+  main { max-width: 1100px; margin: 0 auto; padding: 48px 60px 64px; }
+
+  .section-label { font-size: 10px; font-weight: 500; letter-spacing: 3px; text-transform: uppercase; color: var(--gold); margin-bottom: 6px; }
+  .section-title { font-family: 'Cormorant Garamond', serif; font-size: 26px; color: var(--navy); margin-bottom: 18px; padding-bottom: 12px; border-bottom: 1px solid var(--border); font-weight: 700; }
+
+  /* SEARCH */
+  .search-wrap { position: sticky; top: 0; z-index: 20; background: var(--cream); padding: 16px 0 14px; margin-bottom: 8px; }
+  .search-box { display: flex; align-items: center; gap: 12px; background: #fff; border: 1px solid var(--border); border-radius: 10px; padding: 4px 6px 4px 18px; box-shadow: 0 3px 14px rgba(15,35,64,0.06); }
+  .search-box:focus-within { border-color: var(--gold); }
+  .search-box svg { width: 18px; height: 18px; stroke: var(--gold); fill: none; stroke-width: 2; stroke-linecap: round; flex-shrink: 0; }
+  .search-box input { flex: 1; border: none; outline: none; font-family: 'Inter', sans-serif; font-size: 15px; color: var(--text); padding: 12px 0; background: transparent; }
+  .search-count { font-size: 13px; color: var(--muted); white-space: nowrap; padding-right: 6px; }
+  .search-nav-btn { background: rgba(74,124,111,0.1); border: none; color: var(--navy); width: 34px; height: 34px; border-radius: 7px; cursor: pointer; font-size: 15px; font-weight: 700; transition: background 0.15s; }
+  .search-nav-btn:hover { background: rgba(74,124,111,0.2); }
+  .search-clear { background: none; border: none; color: var(--muted); font-size: 20px; cursor: pointer; padding: 0 10px; }
+  .search-clear:hover { color: var(--navy); }
+  mark.search-hit { background: var(--gold-bright); color: #1a1a1a; border-radius: 3px; padding: 0 1px; }
+  mark.search-hit.current { background: var(--gold); color: #fff; }
+
+  /* DOC SECTIONS (collapsible) */
+  .doc-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 48px; }
+  .doc-section { background: #fff; border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+  .doc-section-btn { width: 100%; display: flex; justify-content: space-between; align-items: center; gap: 12px; background: #fff; border: none; padding: 16px 22px; cursor: pointer; text-align: left; font-family: 'Inter', sans-serif; }
+  .doc-section-btn:hover { background: rgba(74,124,111,0.03); }
+  .doc-sec-title { font-family: 'Cormorant Garamond', serif; font-size: 19px; font-weight: 700; color: var(--navy); }
+  .doc-roman { color: var(--gold); margin-right: 4px; }
+  .doc-chevron { color: var(--gold); font-size: 14px; transition: transform 0.2s; flex-shrink: 0; }
+  .doc-section.open .doc-chevron { transform: rotate(180deg); }
+  .doc-section-body { display: none; padding: 4px 26px 22px; }
+  .doc-section.open .doc-section-body { display: block; }
+
+  .pol-subhead { font-size: 14px; font-weight: 600; color: var(--navy); margin: 16px 0 6px; letter-spacing: 0.2px; }
+  .pol-p { font-size: 14px; line-height: 1.65; color: #333; margin-bottom: 10px; }
+  .pol-ul { margin: 6px 0 12px; padding-left: 20px; }
+  .pol-ul li { font-size: 14px; line-height: 1.6; color: #333; margin-bottom: 7px; }
+  .pol-note { background: rgba(160,120,74,0.09); border-left: 3px solid var(--gold); border-radius: 4px; padding: 10px 14px; font-size: 13px; line-height: 1.55; color: #5a4a38; margin: 10px 0 12px; font-style: italic; }
+
+  .doc-toolbar { display: flex; gap: 10px; margin-bottom: 14px; }
+  .doc-tool-btn { font-size: 12.5px; font-weight: 500; color: var(--navy); background: #fff; border: 1px solid var(--border); border-radius: 7px; padding: 8px 14px; cursor: pointer; transition: all 0.15s; }
+  .doc-tool-btn:hover { border-color: var(--gold); }
+  .doc-source-link { display: inline-flex; align-items: center; gap: 7px; font-size: 12.5px; font-weight: 600; color: var(--navy); text-decoration: none; background: rgba(74,124,111,0.08); border: 1px solid var(--border); border-radius: 7px; padding: 8px 14px; transition: all 0.15s; margin-left: auto; }
+  .doc-source-link:hover { border-color: var(--gold); background: rgba(74,124,111,0.12); }
+  .doc-source-link .arrow { color: var(--gold); }
+
+  /* QUICK REFERENCE TABS */
+  .qr-wrap { margin-top: 8px; }
+  .policy-tabs { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
+  .policy-tab { flex: 1 1 auto; min-width: 150px; padding: 13px 18px; background: #fff; border: 1px solid var(--border); border-radius: 10px; font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 600; color: var(--navy); cursor: pointer; transition: all 0.18s; text-align: center; }
+  .policy-tab:hover { border-color: var(--gold); box-shadow: 0 3px 10px rgba(15,35,64,0.06); }
+  .policy-tab.active { background: var(--navy); color: #fff; border-color: var(--navy); }
+  .policy-panel { display: none; background: #fff; border: 1px solid var(--border); border-radius: 12px; padding: 26px 30px; font-size: 14px; line-height: 1.7; color: #333; box-shadow: 0 4px 20px rgba(15,35,64,0.05); }
+  .policy-panel.active { display: block; }
+  .policy-panel-title { font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 700; color: var(--navy); margin-bottom: 12px; }
+  .policy-panel ul { margin: 8px 0 0; padding-left: 20px; }
+  .policy-panel ul li { margin-bottom: 7px; }
+  .policy-panel p { margin-bottom: 9px; }
+  .placeholder-note { color: var(--muted); font-style: italic; }
+
+  footer { background: var(--navy); text-align: center; padding: 20px; font-size: 12px; color: rgba(255,255,255,0.35); letter-spacing: 1px; user-select: none; }
+
+  @media (max-width: 600px) {
+    header { padding: 36px 24px 32px; flex-direction: column; align-items: flex-start; gap: 20px; }
+    header h1 { font-size: 28px; }
+    .header-logos { margin-left: 0; }
+    main { padding: 24px 20px 48px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-content">
+    <a href="index.html" class="back-link">← Back to SC Team Hub</a>
+    <p class="header-eyebrow">Excel Education Systems · Staff Only</p>
+    <h1>Enrollment Policies</h1>
+    <p class="subtitle">The full Success Coach Policies and Procedures, searchable by keyword. Quick-reference summaries for the most common questions are at the bottom.</p>
+  </div>
+  <div class="header-logos">
+    <img src="Asset_2.svg" alt="Excel High School" style="height:60px;width:auto;">
+  </div>
+</header>
+
+<main>
+
+  <div class="search-wrap">
+    <div class="search-box">
+      <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input type="text" id="policySearch" placeholder="Search policies by keyword (e.g. extension, New York, transfer, attendance)..." autocomplete="off" />
+      <span class="search-count" id="searchCount"></span>
+      <button class="search-nav-btn" id="prevHit" title="Previous match" onclick="jumpHit(-1)" style="display:none;">↑</button>
+      <button class="search-nav-btn" id="nextHit" title="Next match" onclick="jumpHit(1)" style="display:none;">↓</button>
+      <button class="search-clear" id="clearSearch" title="Clear" onclick="clearSearch()" style="display:none;">×</button>
+    </div>
+  </div>
+
+  <p class="section-label">Reference</p>
+  <h2 class="section-title">Success Coach Policies &amp; Procedures</h2>
+
+  <div class="doc-toolbar">
+    <button class="doc-tool-btn" onclick="setAllSections(true)">Expand all</button>
+    <button class="doc-tool-btn" onclick="setAllSections(false)">Collapse all</button>
+    <a class="doc-source-link" href="https://docs.google.com/document/d/1KYesRcALSrsbA86OgPqNR44DRJWV-Vrr1ckj8_7xrls/edit?usp=sharing" target="_blank">Open full Google Doc <span class="arrow">↗</span></a>
+  </div>
+
+  <div class="doc-list" id="docList">
+    <div class="doc-section">
+      <button class="doc-section-btn" onclick="toggleDocSection(this)">
+        <span class="doc-sec-title"><span class="doc-roman">I.</span> Program Eligibility</span>
+        <span class="doc-chevron">▾</span>
+      </button>
+      <div class="doc-section-body">
+        <p class="pol-p">Prospective <strong>middle school</strong> students must be at least 10 years old and have completed 5th grade.</p>
+<p class="pol-p">Prospective <strong>high school</strong> students must be at least 14 years old and have completed middle school. Incoming 9th-grade students who attended middle school at Excel do not need to be 14 years old to enroll in the high school program.</p>
+<h4 class="pol-subhead">High School Single Course Eligibility</h4>
+<p class="pol-p">Prospective high school Single Course students must be at least 14 years old to enroll in the program.</p>
+<p class="pol-p">Middle-school-aged students (ages 11–13) may be eligible for high school Single Course enrollment provided they have received clearance from a guidance counselor or an approved official at the student's full-time school. Emailed documentation verifying prior prerequisite completion or academic readiness must be sent to the designated Enrollment Services Manager(s) for review and approval. Documentation must come from the student's school; verification submitted by a parent, the student, or any third party outside the school will not be accepted. Any exceptions are at the discretion of the Enrollment Services Manager, who will provide further guidance at that time.</p>
+<div class="pol-note">Requests involving 11-year-old students are rare and are generally denied absent documentation of exceptional academic achievement for that age.</div>
+<p class="pol-p">Prospective middle school Single Course students must be at least 10 years old and have completed 5th grade. This enrollment is completed through the "Middle School Semester" enrollment process.</p>
+<h4 class="pol-subhead">Middle School Math Acceleration</h4>
+<p class="pol-p">Advanced middle school students may take high-school-level mathematics with Excel at the discretion of their Success Coach, based on the student's demonstrated readiness. A student may progress through the standard high school math sequence during middle school (for example, taking Algebra I in 7th grade and Geometry in 8th grade) when requested by the family and approved by the Success Coach. High school credit earned this way is recorded and transfers per Sections V and VI.</p>
+      </div>
+    </div>
+    <div class="doc-section">
+      <button class="doc-section-btn" onclick="toggleDocSection(this)">
+        <span class="doc-sec-title"><span class="doc-roman">II.</span> Academic Records and Documentation</span>
+        <span class="doc-chevron">▾</span>
+      </button>
+      <div class="doc-section-body">
+        <p class="pol-p">Students and families must enroll in the appropriate program online. Success Coaches may assist students with enrollment.</p>
+<p class="pol-p">All official records must come from the issuing institution. If the records are received from the student, Success Coaches can assist in making 1–2 course selections.</p>
+<p class="pol-p">Excel requires high school student records to assign appropriate courses. If Excel does not receive student records within the first 30 days of enrollment, Success Coaches assign standard grade-level courses. Without official records, the student cannot re-enroll with Excel or request transcripts.</p>
+<p class="pol-p">Middle school and first-semester 9th-grade students do not need records submitted to begin at Excel High School.</p>
+      </div>
+    </div>
+    <div class="doc-section">
+      <button class="doc-section-btn" onclick="toggleDocSection(this)">
+        <span class="doc-sec-title"><span class="doc-roman">III.</span> Enrollment Procedure</span>
+        <span class="doc-chevron">▾</span>
+      </button>
+      <div class="doc-section-body">
+        <p class="pol-p">Students and families enroll in the appropriate program online; Success Coaches may assist if needed. Once enrollment is complete, onboarding and initial contact responsibilities are carried out per Section VIII (Success Coach Responsibilities and Conduct).</p>
+      </div>
+    </div>
+    <div class="doc-section">
+      <button class="doc-section-btn" onclick="toggleDocSection(this)">
+        <span class="doc-sec-title"><span class="doc-roman">IV.</span> Length of Enrollment</span>
+        <span class="doc-chevron">▾</span>
+      </button>
+      <div class="doc-section-body">
+        <h4 class="pol-subhead">Full-Time Students</h4>
+<p class="pol-p">A full-year enrollment includes a 12-month deadline to finish courses. All students are eligible for a one-time, $200, 2-month extension.</p>
+<p class="pol-p">A semester enrollment includes a 6-month deadline to finish courses. All students are eligible for a one-time, $200, 2-month extension.</p>
+<p class="pol-p">A student cannot exceed 6.5 credits (or courses in middle school) in a full-year program, or 4 credits in a semester program. These standard caps do not apply to the Gold and Platinum programs: Gold allows up to 8 credits per year, and Platinum allows up to 10 credits per year. Exceeding the standard cap is reserved for rare circumstances or when an Enrollment Services Manager deems it appropriate upon a student's re-enrollment.</p>
+<h4 class="pol-subhead">Part-Time Students</h4>
+<p class="pol-p">A single course enrollment includes a 6-month deadline to complete the course. All students are eligible for a one-time, $200, 2-month extension.</p>
+<p class="pol-p">A single course enrollment can include anywhere between 0.5 and 3 credits at a time.</p>
+<h4 class="pol-subhead">Attendance and Account Activity</h4>
+<p class="pol-p">All students must log in to the LMS at least once every 60 days. Failure to do so results in an attendance hold being placed on the account. Removing an attendance hold requires the student or family to contact Excel directly; logging back in alone does not lift the hold.</p>
+<div class="pol-note">This attendance policy does not apply to students taking AP courses. Because AP coursework is completed on a separate platform (Apex), these students may be actively working in their AP courses without visiting the LMS within the 60-day window.</div>
+      </div>
+    </div>
+    <div class="doc-section">
+      <button class="doc-section-btn" onclick="toggleDocSection(this)">
+        <span class="doc-sec-title"><span class="doc-roman">V.</span> Credit Transfers</span>
+        <span class="doc-chevron">▾</span>
+      </button>
+      <div class="doc-section-body">
+        <p class="pol-p">Excel accepts up to 75% of the credits needed to graduate in transfer. The remaining credits must be earned directly through Excel (see the residency requirement in Section VI). Transfer credit is determined through official transcript evaluation after enrollment. International records are evaluated through Excel's third-party evaluator (see International Students, Section VII).</p>
+<p class="pol-p">Students may not retake a course that they have previously passed and earned credit for.</p>
+<p class="pol-p">GED test results can be transferred for one credit per passed GED section.</p>
+<p class="pol-p">Any high school credit recorded on a middle schooler's transcript is transferred as such.</p>
+      </div>
+    </div>
+    <div class="doc-section">
+      <button class="doc-section-btn" onclick="toggleDocSection(this)">
+        <span class="doc-sec-title"><span class="doc-roman">VI.</span> Graduation Requirements</span>
+        <span class="doc-chevron">▾</span>
+      </button>
+      <div class="doc-section-body">
+        <h4 class="pol-subhead">Overview</h4>
+<p class="pol-p">Excel High School awards a regionally accredited high school diploma upon successful completion of all required credits and program requirements. Students must meet both credit and course distribution requirements to be eligible for graduation.</p>
+<p class="pol-p"><strong>Residency Requirement:</strong> Regardless of transfer credits, every student must complete a minimum of 5.5 to 6 credits directly through Excel to earn a diploma. This corresponds to the portion of the diploma that cannot be satisfied by transfer credit under the 75% transfer cap (see Section V).</p>
+<h4 class="pol-subhead">Graduation Tracks</h4>
+<p class="pol-p"><strong>Standard Track – 21.5 Credits:</strong> This track meets general high school graduation requirements and is appropriate for students entering the workforce, joining the military, or pursuing college admission without requiring advanced coursework.</p>
+<p class="pol-p"><strong>College Preparatory Track – 24 Credits:</strong> This track is recommended for students planning to attend a four-year college or university. The curriculum is more rigorous and includes additional electives, and can include advanced-level coursework. College-bound students are placed in the "Alternative" 24-credit graduation track, unless specified otherwise by the student and family.</p>
+<p class="pol-p">Success Coaches confirm a student's intended post-graduation plans during initial enrollment and ensure that the appropriate track is assigned. Credit track changes may be made upon request by the student, the student's parent, or guardian.</p>
+<h4 class="pol-subhead">Credit Requirements: 21.5 Credit-Track</h4>
+<ul class="pol-ul"><li><strong>English – 4.0 Credits:</strong> All English credits must be grade-level courses aligned to 9th–12th grade standards. Transfer credits must clearly reflect high school-level, core area English coursework (English 9, 10, 11, 12).</li><li><strong>Math – 3.0 Credits:</strong> Course substitutions must align with the standard high school math progression and be approved through transcript evaluation (Algebra I, Geometry, Algebra II). Students who complete high school-level math courses in middle school (such as Algebra I or Geometry) are not required to retake those courses. High school math credit earned during middle school counts toward the corresponding graduation requirement.</li><li><strong>Science – 3.0 Credits:</strong> Physics may be taken in place of Chemistry if appropriate for the student's academic plan (Earth &amp; Space Science, Biology, Chemistry or Physics).</li><li><strong>Social Studies – 3.5 Credits:</strong> These courses may be completed as standalone courses or in approved combined formats, provided total credit equals 3.5 credits (World History, American History, U.S. Government, Economics).</li><li><strong>Electives – 8.0 Credits:</strong> Electives may include world languages, technology, career and technical education (CTE), advanced academics, or additional core coursework. Required within electives: 1 Fine Arts credit, 1 Combined Health &amp; Fitness credit, and 1 Personal Finance credit. The remaining elective credits may be selected based on student interest, career goals, or post-secondary planning.</li></ul>
+<h4 class="pol-subhead">Credit Requirements: 24 Credit-Track</h4>
+<ul class="pol-ul"><li><strong>English – 4.0 Credits</strong> (English 9, 10, 11, 12).</li><li><strong>Mathematics – 4.0 Credits:</strong> Success Coaches should strongly encourage students planning to attend competitive colleges to progress beyond Algebra II (Algebra I, Geometry, Algebra II, plus an advanced fourth credit such as Pre-Calculus, an approved college-level mathematics course, or Consumer Math).</li><li><strong>Science – 3.0 Credits</strong> (Earth &amp; Space Science, Biology, Chemistry).</li><li><strong>Social Studies – 3.5 Credits</strong> (World History, American History, U.S. Government, Economics).</li><li><strong>Electives – 9.5 Credits:</strong> Two (2) credits of the same foreign language are required on the 24-credit track. Required within electives: 1 Fine Arts credit, 1 Combined Health &amp; Fitness credit, 1 Personal Finance credit, and 2 Foreign Language credits.</li></ul>
+<h4 class="pol-subhead">Assessments and Exams</h4>
+<p class="pol-p">Exams are taken from home and are not proctored. Course exams include unit tests, a midterm, and a final within each course, and are timed (2 hours). Students have two attempts on each exam. Exam access is subject to a lock period from the start of enrollment: 60 days for full-time (standard) enrollments and 30 days for single-course (part-time) enrollments. Once a student completes a course, finalization takes up to 5 to 7 business days.</p>
+<h4 class="pol-subhead">Transcripts and Document Authentication</h4>
+<p class="pol-p">Official transcripts are issued through Parchment. For students requiring documents for international use, Excel offers apostille and U.S. State Department legalization services, arranged through the school store. Additional fees apply for these services and for international shipping.</p>
+      </div>
+    </div>
+    <div class="doc-section">
+      <button class="doc-section-btn" onclick="toggleDocSection(this)">
+        <span class="doc-sec-title"><span class="doc-roman">VII.</span> Special State and International Policies</span>
+        <span class="doc-chevron">▾</span>
+      </button>
+      <div class="doc-section-body">
+        <h4 class="pol-subhead">New York — Overview</h4>
+<p class="pol-p">Standard students residing in New York State must comply with the New York State Education Department (NYSED) regulations on home instruction.</p>
+<p class="pol-p">New York Senate Bill S6705 was signed into law as Chapter 606 (effective 2026). It amended state education law to expand college admission and financial aid eligibility for graduates of certain accredited U.S.-based online high school programs. The law requires SUNY, CUNY, and community colleges to establish admission policies recognizing qualifying online high school diplomas, and makes such graduates eligible for New York State financial aid (including TAP), removing the prior requirement that New York residents complete a high school equivalency test. Success Coaches should note that specific eligibility determinations rest with the individual institution, and families should confirm their status directly with their target college.</p>
+<div class="pol-note">Excel is confirming its formal qualification under the law's criteria; until confirmed, Success Coaches should describe the law as a likely pathway rather than a guarantee, and direct families to confirm with their target institution.</div>
+<h4 class="pol-subhead">Requirements for New York Students</h4>
+<ul class="pol-ul"><li><strong>Registration:</strong> Families must register their student as home-instructed with their local district superintendent.</li><li><strong>Notice of Intent:</strong> A written notice must be submitted to the local superintendent within 14 days of beginning home instruction.</li><li><strong>Individualized Home Instruction Plan (IHIP):</strong> Upon receiving the district forms, families must submit an IHIP outlining their planned curriculum.</li><li><strong>Instructional and Reporting Requirements:</strong> Families must meet instructional hour and subject requirements, submit quarterly progress reports to the district, and complete annual assessments as required by grade level.</li></ul>
+<div class="pol-note">Families should review Part 100.10 of the NYSED Commissioner's Regulations and consult NYSED's Home Instruction webpage for details.</div>
+<h4 class="pol-subhead">Success Coach Responsibilities (New York)</h4>
+<p class="pol-p">Verify the student's state of residence during or immediately after enrollment. If the student resides in New York, provide the family with the official New York Enrollment Information notice via email, and document the communication in the student's enrollment notes. Excel High School does not contact districts directly; the family is responsible for filing the required documentation.</p>
+<h4 class="pol-subhead">Post-Graduation Considerations</h4>
+<p class="pol-p">Historically, New York did not recognize online diplomas issued by out-of-state schools unless the student was registered as a homeschool student. Following the enactment of S6705 (Chapter 606), New York now requires SUNY, CUNY, and community colleges to recognize qualifying accredited online high school diplomas for admission and to extend state financial aid eligibility. Because implementation and specific eligibility criteria continue to develop, families should still confirm requirements directly with prospective colleges, employers, or the relevant state agency. Areas that may be affected include college admissions documentation, state financial aid (such as TAP), and certain employment verifications.</p>
+<h4 class="pol-subhead">California — Overview</h4>
+<p class="pol-p">Students residing in California who plan to attend a University of California (UC) or California State University (CSU) campus must complete the state's A–G subject requirements. These requirements define the minimum courses and grades required for admission and apply to all students, including those enrolled in online programs such as Excel High School.</p>
+<h4 class="pol-subhead">Success Coach Responsibilities (California)</h4>
+<p class="pol-p">Verify the student's state of residence during or immediately after enrollment. If the student resides in California, provide the family with the CA A–G program information, and document the communication in the student's enrollment notes.</p>
+<h4 class="pol-subhead">International Students</h4>
+<p class="pol-p">Students whose academic records originate outside the United States must have those records evaluated through Excel's third-party credential evaluator, Scholaro. Scholaro reviews and translates the coursework into a U.S. credit equivalent and transmits the completed evaluation directly to Excel. Families do not need to arrange their own certified translation.</p>
+<p class="pol-p">Transfer credit for international students is subject to the same 75% cap outlined in Section V. International students who have already graduated from a secondary program abroad remain eligible to enroll, with prior records transferring per that cap.</p>
+<p class="pol-p">There are no geographic restrictions on enrollment. A basic level of English proficiency is required, as coursework and assessments are completed in English; translation tools are available to support comprehension, but assignments must be submitted in English.</p>
+      </div>
+    </div>
+    <div class="doc-section">
+      <button class="doc-section-btn" onclick="toggleDocSection(this)">
+        <span class="doc-sec-title"><span class="doc-roman">VIII.</span> Success Coach Responsibilities and Conduct</span>
+        <span class="doc-chevron">▾</span>
+      </button>
+      <div class="doc-section-body">
+        <h4 class="pol-subhead">Student Onboarding and Initial Contact</h4>
+<p class="pol-p">Success Coaches are responsible for connecting with the student and any associated account holders within the first 2 business days of enrollment. During initial contact, Success Coaches are responsible for:</p>
+<ul class="pol-ul"><li>Confirming the student's enrollment program and grade level</li><li>Verifying the student's state of residence and providing any required state-specific documentation (see Section VII)</li><li>Inquiring about the student's plans after graduation to ensure the appropriate credit track is assigned</li><li>Reviewing the student's transcript, if available, and communicating course assignments</li><li>Orienting the student and family to program expectations, pacing, and available support</li></ul>
+<h4 class="pol-subhead">Course Assignment and Tracking</h4>
+<p class="pol-p">Success Coaches are responsible for assigning courses based on the student's official transcript. If official records have not been received from the issuing institution, Success Coaches may assist with 1–2 course selections. If no official records are received within 30 days of enrollment, Success Coaches assign standard grade-level courses.</p>
+<p class="pol-p">Success Coaches are responsible for:</p>
+<ul class="pol-ul"><li>Ensuring course assignments align with the student's graduation track (21.5 or 24 credits)</li><li>Confirming that required core courses are assigned before electives are selected</li><li>Documenting course assignments and any changes in the student's enrollment notes</li></ul>
+<p class="pol-p">For advanced middle school students, Success Coaches may assign high school-level math courses (such as Algebra I in 7th grade or Geometry in 8th grade) at their discretion, based on the student's demonstrated readiness, upon family request. Coaches should document the request, their approval, and the high school credit designation in the student's enrollment notes.</p>
+<h4 class="pol-subhead">Professional Conduct</h4>
+<p class="pol-p">Success Coaches are responsible for maintaining professional and respectful communication with students, parents, and colleagues at all times, including:</p>
+<ul class="pol-ul"><li>Providing accurate information regarding school policies, graduation requirements, and program expectations</li><li>Maintaining confidentiality of student records in accordance with FERPA and institutional privacy policies</li><li>Avoiding academic or administrative decisions outside of established policy or their authorized scope</li><li>Escalating concerns or edge cases to the appropriate team lead or department</li></ul>
+      </div>
+    </div>
+    <div class="doc-section">
+      <button class="doc-section-btn" onclick="toggleDocSection(this)">
+        <span class="doc-sec-title"><span class="doc-roman">IX.</span> Communication and Documentation Standards</span>
+        <span class="doc-chevron">▾</span>
+      </button>
+      <div class="doc-section-body">
+        <h4 class="pol-subhead">Communication Standards</h4>
+<p class="pol-p">Success Coaches are responsible for maintaining clear and professional communication with students and families. Approved communication channels include email, phone, Zoom, and text. All substantive communications, including course assignments, enrollment decisions, state-specific notices, and follow-ups, must be conducted through school-approved channels.</p>
+<ul class="pol-ul"><li>Responding to student and family inquiries within 2 business days</li><li>Using Zoom for scheduled check-ins, kickoff sessions, and any coaching sessions included in the Success Coach Pro program</li><li>Keeping all communication professional and appropriate in tone, regardless of channel</li></ul>
+<h4 class="pol-subhead">Documentation Standards</h4>
+<p class="pol-p">Success Coaches are responsible for documenting all significant student interactions in LearnStage. Accurate and timely documentation ensures continuity of support and accountability across the team. Coaches should document:</p>
+<ul class="pol-ul"><li>Initial contact and onboarding communications</li><li>Course assignments and any subsequent changes</li><li>State-specific notices provided to the student or family (e.g., New York, California)</li><li>Graduation track confirmations and any track change requests</li><li>Any escalations or referrals made on behalf of the student</li></ul>
+      </div>
+    </div>
+    <div class="doc-section">
+      <button class="doc-section-btn" onclick="toggleDocSection(this)">
+        <span class="doc-sec-title"><span class="doc-roman">X.</span> Withdrawal, Re-Enrollment, and Extensions</span>
+        <span class="doc-chevron">▾</span>
+      </button>
+      <div class="doc-section-body">
+        <h4 class="pol-subhead">Withdrawal</h4>
+<p class="pol-p">Withdrawals are initiated by the student or family. Upon receiving a withdrawal request, Success Coaches are responsible for documenting the request in LearnStage and notifying the appropriate team members to process the withdrawal.</p>
+<h4 class="pol-subhead">Re-Enrollment</h4>
+<p class="pol-p">Students who have previously withdrawn may re-enroll with conditions. The Enrollment Services Team and Success Coaches are responsible for reviewing the student's account prior to re-enrollment to confirm all of the following:</p>
+<ul class="pol-ul"><li>The student has no remaining balance on their account</li><li>The student's account has not been sent to collections</li><li>Official student records from the prior enrollment have been received</li><li>The student does not have another active enrollment (students may only hold one active enrollment at a time)</li><li>The student has not been restricted from re-enrollment by leadership (COO or Academic Director)</li></ul>
+<h4 class="pol-subhead">Extensions</h4>
+<p class="pol-p">All extension requests are subject to the terms outlined in Section IV. Success Coaches are responsible for:</p>
+<ul class="pol-ul"><li>Informing students and families of the extension option and associated cost ($200 for a 2-month extension) when a deadline is approaching</li><li>Documenting extension requests and confirmations in LearnStage</li><li>Noting that extensions are one-time only and no further extensions will be granted beyond the approved period</li></ul>
+<p class="pol-p">Informal extension requests that fall outside of standard terms are at the discretion of the Enrollment Services Team.</p>
+      </div>
+    </div>
+    <div class="doc-section">
+      <button class="doc-section-btn" onclick="toggleDocSection(this)">
+        <span class="doc-sec-title"><span class="doc-roman">XI.</span> Escalation Procedures</span>
+        <span class="doc-chevron">▾</span>
+      </button>
+      <div class="doc-section-body">
+        <p class="pol-p">Success Coaches are responsible for recognizing situations that fall outside of their authority or standard procedures and escalating promptly to the appropriate party. Success Coaches should not attempt to resolve escalatable situations independently.</p>
+<h4 class="pol-subhead">Escalation Routing</h4>
+<ul class="pol-ul"><li><strong>General escalations / edge cases:</strong> first to Max, Noah, or Jack, then to Nate (COO)</li><li><strong>OFAC / sanctions questions:</strong> first to Nicole (Student Records), then to Nate (COO)</li><li><strong>Partnership / consultant inquiries:</strong> first to Jack (initial contact), then to Nate (COO)</li><li><strong>Age exceptions / under-age enrollment:</strong> first to Jack, then to Nate (COO)</li><li><strong>Refund / billing disputes outside policy:</strong> first to the Enrollment Services Manager, then to Nate (COO)</li></ul>
+<h4 class="pol-subhead">General Expectations</h4>
+<p class="pol-p">Success Coaches are responsible for:</p>
+<ul class="pol-ul"><li>Identifying situations that require escalation as early as possible</li><li>Providing the relevant party with a clear summary of the situation and any documentation from LearnStage</li><li>Continuing to serve as the primary point of contact for the student and family unless directed otherwise</li><li>Documenting the escalation and its outcome in the student's enrollment notes</li></ul>
+      </div>
+    </div>
+    <div class="doc-section">
+      <button class="doc-section-btn" onclick="toggleDocSection(this)">
+        <span class="doc-sec-title"><span class="doc-roman">XII.</span> Adult Diploma Program</span>
+        <span class="doc-chevron">▾</span>
+      </button>
+      <div class="doc-section-body">
+        <p class="pol-p">Excel also offers an Adult High School Diploma Program (Traditional and AcceleratED tracks) for learners aged 18 and older. Adult Diploma students are largely self-directed and do not receive dedicated Success Coach support or academic counseling. General support, however, is available to them by phone.</p>
+<div class="pol-note">This document primarily governs the coached (non-adult) student population. Adult Diploma Program operations fall outside the scope of standard Success Coach responsibilities except for general phone support.</div>
+      </div>
+    </div>
+    <div class="doc-section">
+      <button class="doc-section-btn" onclick="toggleDocSection(this)">
+        <span class="doc-sec-title"><span class="doc-roman">XIII.</span> Revision and Approval Process</span>
+        <span class="doc-chevron">▾</span>
+      </button>
+      <div class="doc-section-body">
+        <p class="pol-p">This document is reviewed semi-annually to ensure accuracy and alignment with current school policies, state regulations, and program operations. Additional revisions may be made as needed in response to policy changes, regulatory updates, or operational developments.</p>
+<h4 class="pol-subhead">Review and Approval</h4>
+<ul class="pol-ul"><li>Proposed revisions may be submitted by any member of the Success Coach team, Training Lead(s), or department leadership</li><li>All proposed changes must be reviewed by the Success Coach Team Lead prior to submission for approval</li><li>Final approval authority rests with the COO</li><li>Upon approval, the document version number and date will be updated accordingly</li></ul>
+<h4 class="pol-subhead">Version History</h4>
+<ul class="pol-ul"><li><strong>Version 1.0 (Spring 2026)</strong> — Initial release.</li><li><strong>Version 1.1 (Summer 2026)</strong> — Added middle school high school-level math acceleration policy. Revised Single Course eligibility for middle-school-aged students (ages 11–13) to require school-sourced documentation and Enrollment Services Manager approval, replacing the prior 13-year-old counselor-letter provision. Added the 75% transfer cap and residency minimum to Sections V and VI. Added attendance/login policy, assessment mechanics, transcript/authentication details, and an International Students subsection. Updated the New York policy to reflect enactment of S6705 (Chapter 606). Added an escalation routing table and a new Adult Diploma Program section. Standardized enrollment role terminology and consolidated duplicated onboarding content.</li></ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="qr-wrap">
+    <p class="section-label">Quick Reference</p>
+    <h2 class="section-title">Most-Asked Policies</h2>
+    <div class="policy-tabs">
+      <button class="policy-tab active" onclick="showPolicy(this, 'qr-1')">Doubling Up in a Subject</button>
+      <button class="policy-tab" onclick="showPolicy(this, 'qr-2')">Expedited Grading</button>
+      <button class="policy-tab" onclick="showPolicy(this, 'qr-3')">Policy 3</button>
+      <button class="policy-tab" onclick="showPolicy(this, 'qr-4')">Policy 4</button>
+    </div>
+    <div class="policy-panel active" id="qr-1">
+      <div class="policy-panel-title">Doubling Up in a Subject (Catch-Up)</div>
+      <p>A student may take two courses in the same subject (e.g., two math courses) in one enrollment year <strong>if it fits within their program's credit limit</strong> (for example, by taking one less elective). A few rules apply:</p>
+      <ul>
+        <li>This is typically done only when a student is <strong>behind</strong>, not to get ahead.</li>
+        <li>Give the student access to <strong>one course at a time</strong>. They must reach out to you for access to the second course.</li>
+        <li><strong>Document the plan in the student's notes.</strong></li>
+        <li>In your email to the student, state that they must reach out for access to the second course, and that if they do not, they will need to take and pay for it in the next grade level.</li>
+        <li>Recommended pacing: finish the first course within the <strong>first six months</strong>, leaving six months for the second. After <strong>eight months</strong>, the second course is not guaranteed within the same enrollment.</li>
+        <li>The one-time <strong>two-month extension ($200)</strong> is always available to finish any necessary courses.</li>
+      </ul>
+    </div>
+    <div class="policy-panel" id="qr-2">
+      <div class="policy-panel-title">Expedited Grading</div>
+      <p><strong>Never promise one-day expedited grading to students.</strong> Instead, tell them we will work to expedite their request and that you will follow up once you have heard from the grader.</p>
+      <ul>
+        <li><strong>AP English exception:</strong> Students who save a large amount of work for the end may submit 20-30 assignments in a single day. Standard one-day expedited grading cannot be honored in these cases. Work directly with the AP English grader to come up with a feasible plan.</li>
+      </ul>
+    </div>
+    <div class="policy-panel" id="qr-3">
+      <div class="policy-panel-title">Policy 3</div>
+      <p class="placeholder-note">Placeholder — quick-reference summary coming soon.</p>
+    </div>
+    <div class="policy-panel" id="qr-4">
+      <div class="policy-panel-title">Policy 4</div>
+      <p class="placeholder-note">Placeholder — quick-reference summary coming soon.</p>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  Excel High School · Northgate Academy · Success Coach Resources Hub
+</footer>
+
+<script>
+  // --- Collapsible doc sections ---
+  function toggleDocSection(btn) { btn.parentElement.classList.toggle('open'); }
+  function setAllSections(open) {
+    document.querySelectorAll('.doc-section').forEach(s => s.classList.toggle('open', open));
+  }
+
+  // --- Quick-reference tabs ---
+  function showPolicy(btn, panelId) {
+    document.querySelectorAll('.policy-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.policy-panel').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById(panelId).classList.add('active');
+  }
+
+  // --- Keyword search over the policy document ---
+  var searchInput = document.getElementById('policySearch');
+  var searchCount = document.getElementById('searchCount');
+  var docList = document.getElementById('docList');
+  var hits = [];
+  var currentHit = -1;
+  var debounceTimer = null;
+
+  function escapeRegExp(s) { return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }
+
+  function clearHighlights() {
+    docList.querySelectorAll('mark.search-hit').forEach(function(m) {
+      var parent = m.parentNode;
+      parent.replaceChild(document.createTextNode(m.textContent), m);
+      parent.normalize();
+    });
+    hits = []; currentHit = -1;
+  }
+
+  function highlightTextNodes(root, regex) {
+    var walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
+      acceptNode: function(node) {
+        if (!node.nodeValue.trim()) return NodeFilter.FILTER_REJECT;
+        if (node.parentNode && node.parentNode.nodeName === 'MARK') return NodeFilter.FILTER_REJECT;
+        return NodeFilter.FILTER_ACCEPT;
+      }
+    });
+    var nodes = [];
+    while (walker.nextNode()) nodes.push(walker.currentNode);
+    nodes.forEach(function(node) {
+      var text = node.nodeValue;
+      if (!regex.test(text)) return;
+      regex.lastIndex = 0;
+      var frag = document.createDocumentFragment();
+      var last = 0, m;
+      while ((m = regex.exec(text)) !== null) {
+        if (m.index > last) frag.appendChild(document.createTextNode(text.slice(last, m.index)));
+        var mark = document.createElement('mark');
+        mark.className = 'search-hit';
+        mark.textContent = m[0];
+        frag.appendChild(mark);
+        last = m.index + m[0].length;
+        if (m.index === regex.lastIndex) regex.lastIndex++;
+      }
+      if (last < text.length) frag.appendChild(document.createTextNode(text.slice(last)));
+      node.parentNode.replaceChild(frag, node);
+    });
+  }
+
+  function runSearch() {
+    var term = searchInput.value.trim();
+    clearHighlights();
+    var showClear = term.length > 0;
+    document.getElementById('clearSearch').style.display = showClear ? 'block' : 'none';
+    if (term.length < 2) {
+      searchCount.textContent = term.length === 1 ? 'Type 2+ characters' : '';
+      document.getElementById('prevHit').style.display = 'none';
+      document.getElementById('nextHit').style.display = 'none';
+      return;
+    }
+    var regex = new RegExp(escapeRegExp(term), 'gi');
+    // expand all sections so matches are visible, then highlight
+    document.querySelectorAll('.doc-section').forEach(function(sec) {
+      highlightTextNodes(sec.querySelector('.doc-section-body'), regex);
+    });
+    hits = Array.prototype.slice.call(docList.querySelectorAll('mark.search-hit'));
+    // open sections that contain hits; collapse those that don't
+    document.querySelectorAll('.doc-section').forEach(function(sec) {
+      var has = sec.querySelector('mark.search-hit');
+      sec.classList.toggle('open', !!has);
+    });
+    if (hits.length === 0) {
+      searchCount.textContent = 'No matches';
+      document.getElementById('prevHit').style.display = 'none';
+      document.getElementById('nextHit').style.display = 'none';
+    } else {
+      currentHit = 0;
+      markCurrent();
+      document.getElementById('prevHit').style.display = 'block';
+      document.getElementById('nextHit').style.display = 'block';
+    }
+  }
+
+  function markCurrent() {
+    hits.forEach(function(h, i) { h.classList.toggle('current', i === currentHit); });
+    if (currentHit >= 0 && hits[currentHit]) {
+      searchCount.textContent = (currentHit + 1) + ' of ' + hits.length;
+      hits[currentHit].scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  }
+
+  function jumpHit(dir) {
+    if (!hits.length) return;
+    currentHit = (currentHit + dir + hits.length) % hits.length;
+    markCurrent();
+  }
+
+  function clearSearch() {
+    searchInput.value = '';
+    clearHighlights();
+    searchCount.textContent = '';
+    document.getElementById('clearSearch').style.display = 'none';
+    document.getElementById('prevHit').style.display = 'none';
+    document.getElementById('nextHit').style.display = 'none';
+    setAllSections(false);
+  }
+
+  searchInput.addEventListener('input', function() {
+    clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(runSearch, 200);
+  });
+  searchInput.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') { e.preventDefault(); jumpHit(e.shiftKey ? -1 : 1); }
+  });
+</script>
+
+</body>
+</html>
